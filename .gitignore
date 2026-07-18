@@ -13,6 +13,8 @@ out/
 
 # Docs
 docs/
+prv.md
+
 
 # Dotenv file
 .env

@@ -4,7 +4,7 @@ pragma solidity ^0.8.35;
 import {project_raffle} from "../src/Raffle.sol";
 import {deploy_raffle} from "../script/deploy_raffle.s.sol";
 import {Test,console} from "forge-std/Test.sol";
-import {VRFCoordinatorV2Mock} from "@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol";
+import {VRFCoordinatorV2Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2Mock.sol";
 
 contract test_raffle is Test{
     event new_players(
@@ -243,14 +243,12 @@ contract test_raffle is Test{
 
         assertEq(ProjectRaffle.get_array_length(), 1);
         assertEq(address(ProjectRaffle).balance, 0.01 ether);
-
-
-
-
-
-
-
     }    
+
+    function test_performUpkeep() public{
+        vm.expectRevert();
+        ProjectRaffle.performUpkeep("");
+    }
 
 
 

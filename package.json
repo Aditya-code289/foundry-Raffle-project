@@ -1,0 +1,28 @@
+{
+  "name": "foundry-raffle-project",
+  "version": "1.0.0",
+  "description": "A decentralized lottery built with Solidity and Foundry, integrating Chainlink VRF for verifiable randomness and designed with a test-driven approach.",
+  "main": "index.js",
+  "directories": {
+    "test": "test",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aditya-code289/foundry-Raffle-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Aditya-code289/foundry-Raffle-project/issues"
+  },
+  "homepage": "https://github.com/Aditya-code289/foundry-Raffle-project#readme",
+  "dependencies": {
+    "@chainlink/contracts": "^1.5.0"
+  }
+}

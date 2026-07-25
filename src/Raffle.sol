@@ -1,14 +1,18 @@
 //SPDX License-Identifier: MIT;
 pragma solidity ^0.8.35;
 
-import {VRFCoordinatorV2Interface} from "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+// import {VRFCoordinatorV2Interface} from "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+// import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+
+import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
+import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
+import {IVRFCoordinatorV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFCoordinatorV2Plus.sol";
 
 error ticket_price_is_more(); 
 error payment_failed();
 error Raffle_is_closed();
 
-contract project_raffle is VRFConsumerBaseV2 {
+contract project_raffle is VRFConsumerBaseV2Plus{
 
     enum RaffleState{   
         Open, //0
@@ -30,7 +34,7 @@ contract project_raffle is VRFConsumerBaseV2 {
     uint256 public requestId;
 
 
-    VRFCoordinatorV2Interface private immutable vrf_coordinator;
+    IVRFCoordinatorV2Plus private immutable vrfCoordinator;
 
     bytes32 private immutable keyhash;  
 
@@ -58,12 +62,12 @@ contract project_raffle is VRFConsumerBaseV2 {
                 bytes32 i_keyhash,
                 uint256 i_subsId,
                 uint32 i_gas_limit)
-                VRFConsumerBaseV2(i_vrf_coordinator)
+                VRFConsumerBaseV2Plus(i_vrf_coordinator)
 
     {
         ticket_price = set_price;
         interval = i_interval;
-        vrf_coordinator = VRFCoordinatorV2Interface(i_vrf_coordinator);
+        vrfCoordinator = IVRFCoordinatorV2Plus(i_vrf_coordinator);
         keyhash = i_keyhash;
         subsId = i_subsId;
         gas_limit = i_gas_limit;
@@ -117,21 +121,27 @@ contract project_raffle is VRFConsumerBaseV2 {
 
         // ELSE: Now we need to generate a random number 
 
-        requestId = vrf_coordinator.requestRandomWords(
-            keyhash,
-            subsId,
-            req_conf,
-            gas_limit,
-            num_words
-             
-        );
+       requestId = vrfCoordinator.requestRandomWords(
+    VRFV2PlusClient.RandomWordsRequest({
+        keyHash: keyhash,
+        subId: subsId,
+        requestConfirmations: req_conf,
+        callbackGasLimit: gas_limit,
+        numWords: num_words,
+        extraArgs: VRFV2PlusClient._argsToBytes(
+            VRFV2PlusClient.ExtraArgsV1({
+                nativePayment: false
+            })
+        )
+    })
+);
 
     }
 
 
     function fulfillRandomWords(
-        uint256 requestId,
-        uint256[] memory randomWords
+        uint256 requestID,
+        uint256[] calldata randomWords
     ) internal override{
 
         winner_index = randomWords[0] % (store_players.length);

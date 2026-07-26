@@ -34,11 +34,11 @@ contract HelperConfig is Script{
 
         return input_parameters({
             set_price: 0.01 ether,
-            i_interval: 240, 
+            i_interval: 120, 
             i_vrf_coordinator: 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B,
             i_keyhash: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
-            i_subsId: 84878976044547458740815139561977445788418858650218731706540408119919111200452,          
-            i_gas_limit: 90000
+            i_subsId: 108571105863681888521932584643087204730414844172826741761908529346656777142946,          
+            i_gas_limit: 70000
         });    
 
     }

@@ -27,7 +27,7 @@ contract test_raffle is Test{
     function setUp() external{ 
         DeployRaffle = new deploy_raffle();
         ProjectRaffle = DeployRaffle.run(); 
-        VRF_Mock = VRFCoordinatorV2Mock(DeployRaffle.helper_config().VRF_Mock());
+        // VRF_Mock = VRFCoordinatorV2Mock(DeployRaffle.helper_config().VRF_Mock());
 
 
         /* this is one of the way to access the constructors arguments, 

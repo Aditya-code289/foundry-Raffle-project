@@ -11,6 +11,7 @@ import {IVRFCoordinatorV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/inter
 error ticket_price_is_more(); 
 error payment_failed();
 error Raffle_is_closed();
+error deadline_is_passed();
 
 contract project_raffle is VRFConsumerBaseV2Plus{
 
@@ -77,6 +78,8 @@ contract project_raffle is VRFConsumerBaseV2Plus{
 
 
     function buy_ticket() external payable{ 
+
+        (bool isupkeepneeded,) = checkUpkeep("");
         
         if(msg.value < ticket_price){
             revert ticket_price_is_more();
@@ -84,6 +87,10 @@ contract project_raffle is VRFConsumerBaseV2Plus{
         
         if(raffle_state != RaffleState.Open){
             revert Raffle_is_closed();
+        }
+
+        if (isupkeepneeded){
+            revert deadline_is_passed();
         }
 
         store_players.push(payable(msg.sender)); 
